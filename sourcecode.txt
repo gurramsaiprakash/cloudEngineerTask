@@ -1,0 +1,16 @@
+#!/bin/bash
+sudo yum update -y
+sudo yum upgrade -y
+sudo yum install httpd -y
+sudo systemctl enable httpd
+sudo systemctl start httpd
+sudo yum install apache2 -y
+sudo systemctl enable apache2
+sudo systemctl start apache2
+sudo yum install curl -y
+AMI_ID=$(wget -q -O - http://169.254.169.254/latest/meta-data/ami-id || die \"wget ami-id has failed: $?\")
+echo "<html><head><h1><center>Testing Application Server</center></h1><head><body><h1>I'm Sai Prakash</h1><br><p>This is simple HTML page</p></body></html>" > /var/www/html/index.html
+USER_DATA=$(curl -s http://169.254.169.254/latest/user-data)
+echo "<html><body><p>This is users page</p></body></html>" > /var/www/html/users.html
+sudo systemctl restart apache2
+ 
